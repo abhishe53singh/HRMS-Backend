@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
 from typing import List
 
-from app.database.config import get_db
 from app.services.employee_service import EmployeeService
 from app.schemas.employee import Employee, EmployeeCreate, EmployeeUpdate
 
@@ -12,9 +10,9 @@ router = APIRouter(
 )
 
 
-def get_employee_service(db: Session = Depends(get_db)) -> EmployeeService:
+def get_employee_service() -> EmployeeService:
     """Dependency to get employee service instance"""
-    return EmployeeService(db)
+    return EmployeeService()
 
 
 @router.get("/", response_model=List[Employee])

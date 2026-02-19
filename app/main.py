@@ -2,11 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 
-from app.database.config import Base, engine
 from app.routers import employees_router, attendance_router
-
-# Create database tables
-Base.metadata.create_all(bind=engine)
 
 # Create FastAPI application
 app = FastAPI(

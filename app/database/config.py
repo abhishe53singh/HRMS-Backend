@@ -31,6 +31,7 @@ mongo_client = MongoClient(
 )
 mongo_db = mongo_client[MONGODB_DB_NAME]
 attendance_collection = mongo_db["attendance"]
+employee_collection = mongo_db["employees"]
 
 # Dependency to get DB session
 def get_db():
@@ -42,3 +43,6 @@ def get_db():
 
 def get_mongo_collection():
     return attendance_collection
+
+def get_employee_collection():
+    return employee_collection

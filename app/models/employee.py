@@ -1,17 +1,38 @@
-from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.sql import func
-from app.database.config import Base
+from datetime import datetime
+from typing import Optional
 
 
-class Employee(Base):
-    __tablename__ = "employees"
+class Employee:
+    def __init__(self, employee_id: str, full_name: str, email: str, department: str, 
+                 id: Optional[str] = None, created_at: Optional[datetime] = None):
+        self.id = id
+        self.employee_id = employee_id
+        self.full_name = full_name
+        self.email = email
+        self.department = department
+        self.created_at = created_at or datetime.utcnow()
     
-    id = Column(Integer, primary_key=True, index=True)
-    employee_id = Column(String, unique=True, index=True, nullable=False)
-    full_name = Column(String, nullable=False)
-    email = Column(String, unique=True, nullable=False)
-    department = Column(String, nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    def to_dict(self):
+        """Convert Employee object to dictionary for MongoDB storage"""
+        return {
+            "employee_id": self.employee_id,
+            "full_name": self.full_name,
+            "email": self.email,
+            "department": self.department,
+            "created_at": self.created_at
+        }
+    
+    @classmethod
+    def from_dict(cls, data: dict):
+        """Create Employee object from MongoDB document"""
+        return cls(
+            employee_id=data["employee_id"],
+            full_name=data["full_name"],
+            email=data["email"],
+            department=data["department"],
+            id=str(data["_id"]) if "_id" in data else data.get("id"),
+            created_at=data.get("created_at")
+        )
     
     def __repr__(self):
         return f"<Employee(id={self.id}, employee_id='{self.employee_id}', name='{self.full_name}')>"

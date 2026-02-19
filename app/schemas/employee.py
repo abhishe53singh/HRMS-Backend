@@ -33,7 +33,7 @@ class EmployeeCreate(EmployeeBase):
 
 
 class Employee(EmployeeBase):
-    id: int
+    id: str
     created_at: datetime
     
     class Config:

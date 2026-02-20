@@ -30,11 +30,11 @@ attendance_collection = mongo_db["attendance"] if mongo_db is not None else None
 employee_collection = mongo_db["employees"] if mongo_db is not None else None
 
 def get_mongo_collection():
-    if not attendance_collection:
+    if attendance_collection is None:
         raise Exception("MongoDB not connected - check MONGODB_URL environment variable")
     return attendance_collection
 
 def get_employee_collection():
-    if not employee_collection:
+    if employee_collection is None:
         raise Exception("MongoDB not connected - check MONGODB_URL environment variable")
     return employee_collection

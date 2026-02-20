@@ -11,20 +11,21 @@ MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME", "hrms_attendance")
 try:
     mongo_client = MongoClient(
         MONGODB_URL,
-        serverSelectionTimeoutMS=5000,  # 5 second timeout
+        serverSelectionTimeoutMS=10000,  # 10 second timeout
         connectTimeoutMS=10000,  # 10 second connection timeout
         socketTimeoutMS=10000,  # 10 second socket timeout
         retryWrites=True,
         w='majority'
     )
     # Test connection
-    mongo_client.admin.command('ping')
+    mongo_db = mongo_client[MONGODB_DB_NAME]
+    mongo_db.command('ping')  # Test with the actual database
     print("✅ MongoDB connection successful")
 except Exception as e:
     print(f"❌ MongoDB connection failed: {str(e)}")
     mongo_client = None
+    mongo_db = None
 
-mongo_db = mongo_client[MONGODB_DB_NAME] if mongo_client else None
 attendance_collection = mongo_db["attendance"] if mongo_db else None
 employee_collection = mongo_db["employees"] if mongo_db else None
 

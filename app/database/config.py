@@ -26,8 +26,8 @@ except Exception as e:
     mongo_client = None
     mongo_db = None
 
-attendance_collection = mongo_db["attendance"] if mongo_db else None
-employee_collection = mongo_db["employees"] if mongo_db else None
+attendance_collection = mongo_db["attendance"] if mongo_db is not None else None
+employee_collection = mongo_db["employees"] if mongo_db is not None else None
 
 def get_mongo_collection():
     if not attendance_collection:

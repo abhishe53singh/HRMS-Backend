@@ -1,3 +1,3 @@
-from .config import get_db, get_mongo_collection, Base, engine
+from .config import get_mongo_collection, get_employee_collection
 
-__all__ = ["get_db", "get_mongo_collection", "Base", "engine"]
+__all__ = ["get_mongo_collection", "get_employee_collection"]

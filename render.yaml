@@ -1,0 +1,46 @@
+services:
+  # Python Web Service
+  - type: web
+    name: hrms-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    runtime: python3.10
+    
+    # Environment variables
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.11
+      - key: MONGODB_URL
+        sync: false
+      - key: MONGODB_DB_NAME
+        value: hrms_attendance
+    
+    # Auto-deploy configuration
+    autoDeploy: true
+    
+    # Health check
+    healthCheckPath: /health
+    
+    # Directory configuration
+    rootDir: .
+    
+    # Build context
+    buildContext: .
+    
+    # Instance configuration
+    instanceType: basic
+    region: oregon
+    
+    # Scaling
+    scaling:
+      minInstances: 1
+      maxInstances: 1
+      targetMemoryPercent: 70
+      targetCPUPercent: 70
+
+databases:
+  # MongoDB Atlas (external, not managed by Render)
+  # Note: MongoDB is configured via MONGODB_URL environment variable
+  # Make sure to add your MongoDB connection string in Render dashboard

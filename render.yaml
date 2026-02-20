@@ -13,6 +13,7 @@ services:
       - key: PYTHON_VERSION
         value: 3.10.11
       - key: MONGODB_URL
+        value: mongodb+srv://abhishek53singh1_db_user:uCiQslGUybFD8QDM@db.pjem0wi.mongodb.net/hrms_attendance?retryWrites=true&w=majority
         sync: false
       - key: MONGODB_DB_NAME
         value: hrms_attendance

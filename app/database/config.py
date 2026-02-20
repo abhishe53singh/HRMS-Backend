@@ -3,25 +3,37 @@ import os
 
 # MongoDB Configuration
 # MongoDB Atlas connection
-MONGODB_URL = "mongodb+srv://abhishek53singh1_db_user:uCiQslGUybFD8QDM@db.pjem0wi.mongodb.net/hrms_attendance?retryWrites=true&w=majority"
+MONGODB_URL = os.getenv("MONGODB_URL", "mongodb+srv://abhishek53singh1_db_user:uCiQslGUybFD8QDM@db.pjem0wi.mongodb.net/hrms_attendance?retryWrites=true&w=majority")
 
-MONGODB_DB_NAME = "hrms_attendance"
+MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME", "hrms_attendance")
 
 # Initialize MongoDB client with connection timeout and retry settings
-mongo_client = MongoClient(
-    MONGODB_URL,
-    serverSelectionTimeoutMS=5000,  # 5 second timeout
-    connectTimeoutMS=10000,  # 10 second connection timeout
-    socketTimeoutMS=10000,  # 10 second socket timeout
-    retryWrites=True,
-    w='majority'
-)
-mongo_db = mongo_client[MONGODB_DB_NAME]
-attendance_collection = mongo_db["attendance"]
-employee_collection = mongo_db["employees"]
+try:
+    mongo_client = MongoClient(
+        MONGODB_URL,
+        serverSelectionTimeoutMS=5000,  # 5 second timeout
+        connectTimeoutMS=10000,  # 10 second connection timeout
+        socketTimeoutMS=10000,  # 10 second socket timeout
+        retryWrites=True,
+        w='majority'
+    )
+    # Test connection
+    mongo_client.admin.command('ping')
+    print("✅ MongoDB connection successful")
+except Exception as e:
+    print(f"❌ MongoDB connection failed: {str(e)}")
+    mongo_client = None
+
+mongo_db = mongo_client[MONGODB_DB_NAME] if mongo_client else None
+attendance_collection = mongo_db["attendance"] if mongo_db else None
+employee_collection = mongo_db["employees"] if mongo_db else None
 
 def get_mongo_collection():
+    if not attendance_collection:
+        raise Exception("MongoDB not connected - check MONGODB_URL environment variable")
     return attendance_collection
 
 def get_employee_collection():
+    if not employee_collection:
+        raise Exception("MongoDB not connected - check MONGODB_URL environment variable")
     return employee_collection
